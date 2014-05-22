@@ -12,6 +12,7 @@
   var fs = require("fs");
   var path = require("path");
   var packageInfo = require("../package.json");
+  module.exports.gfs = require("./gridfs.js")
 
   /*
    * Return service principal name according to Kerberos v5 specification

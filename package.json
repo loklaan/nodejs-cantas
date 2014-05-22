@@ -9,6 +9,7 @@
         "markdown": "*",
         "moment": "*",
         "mongoose": "*",
+        "gridfs-stream": "~0.4.1",
         "node-krb5": "*",
         "nodemailer": "*",
         "passport": "*",
