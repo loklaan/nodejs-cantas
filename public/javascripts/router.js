@@ -100,33 +100,37 @@ $(function ($, _, Backbone) {
       $("body div.process-loading").show();
 
       // Get the user's cards and set the card list view
-      new cantas.models.CardCollection().fetch({
-        // Needs to be the same as the morphed filters in 
-        // cantas.views.CardFilterPanelView
-        data: {
+      new cantas.models.CardCollection()
+        .setPage(1)
+        .setFilters({
           $or: [
             { creatorId: cantas.user.id },
             { assignees: cantas.user.id },
             { subscribeUserIds: cantas.user.id }
           ],
           isArchived: false
-        },
-        success: function(collection) {
-          $("body div.process-loading").hide();
+        })
+        .setSort({
+          created: -1,
+          title: 1
+        })
+        .fetch({
+          success: function(collection) {
+            $("body div.process-loading").hide();
 
-          // Set the dashboard content section
-          dashboardView.setContentView(new cantas.views.CardListView({
-            collection: collection,
-            title: "My Cards"
-          }).render());
+            // Set the dashboard content section
+            dashboardView.setContentView(new cantas.views.CardListView({
+              collection: collection,
+              title: "My Cards"
+            }).render());
 
-          that.switchView(dashboardView);
-        },
-        error: function() {
-          cantas.utils.renderTimeoutBox();
-          return false;
-        }
-      });
+            that.switchView(dashboardView);
+          },
+          error: function() {
+            cantas.utils.renderTimeoutBox();
+            return false;
+          }
+        });
     },
 
 
