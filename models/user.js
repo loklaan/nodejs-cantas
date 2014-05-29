@@ -33,6 +33,12 @@
     });
   });
 
+  // virtual
+
+  UserSchema.virtual('url').get(function() {
+    return '/user/' + this.id + '/avatar';
+  });
+
   // static method
 
   UserSchema.statics.getAvatarById = function(identity) {
@@ -47,7 +53,7 @@
         return imageStream;
       });
     });
-  });
+  };
 
   UserSchema.statics.getAvatarInfoById = function(identity) {
     this.findById(identity, function(err, user) {
@@ -61,7 +67,7 @@
         return imageInfo;
       });
     });
-  });
+  };
 
   UserSchema.statics.getByUsername = function(identity, callback) {
     var condition = { username: identity };
