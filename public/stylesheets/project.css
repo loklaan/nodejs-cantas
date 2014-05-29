@@ -3799,3 +3799,26 @@ span.disabled{
 .alert-danger .alert-link {
   color: #953b39;
 }
+
+.settings-container img {
+    display: block;
+}
+
+.settings-container[class*="row"] [class*="span"] {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.settings-container h4 {
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+
+.settings-container h4:after {
+    border-bottom: 1px solid #ccc;
+    content: "";
+    width: 100%;
+    display: block;
+}
+}

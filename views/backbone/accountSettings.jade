@@ -1,10 +1,34 @@
-script#template-account-settings-view(type="text/template")
-  |div.board-ul-title
-  |  h3= header
-  |div.settings-container
-  |  form(role="form")
-  |    div.form-group
-  |      label.control-label Username
-  |        input#userName(type="text", value=username)
-  |      label.control-label Password
-  |        input#userPassword(type="password", placeholder="Password")
+script#template-account-settings-view(type="text/template").
+  div.board-ul-title
+    h3= header
+  div.settings-container.row-fluid
+    div.span6
+      h4 User Details
+      section
+        form(role="form")
+          div.form-group
+            label.control-label Username
+              input#userName(type="text", value=username)
+            label.control-label Password
+              input#userPassword(type="password", placeholder="Password")
+      h4 User Avatar
+      section#avatar-container
+
+script#template-account-upload-avatar-view(type="text/template").
+  table.fileupload-table.table-striped.attachment-download-table.js-attachment-download-table(role='presentation')
+    tbody
+  span.btn.btn-success.fileinput-button
+    span Select&nbsp;&nbsp;image...
+    input#attachmentUpload(type="file", multiple="", name="attachment")
+  table.fileupload-table.table-striped.attachment-upload-table.js-attachment-upload-table(role='presentation')
+    tbody
+
+script#template-account-uploading-view(type="text/template").
+  td.upload-preview
+  td.upload-name= name
+  td.upload-size= fileSize
+    div.progress.progress-success.progress-striped.active.js-upload-progress(role='progressbar', aria-valuemin="0", aria-valuemax='100', aria-valuenow='0')
+      div.bar(style='width:0%')
+  td.upload-control
+    button.btn.btn-primary.start.js-upload-start(disabled='disabled') Processing...
+    button.btn.btn-danger.upload-delete.js-upload-delete Delete
