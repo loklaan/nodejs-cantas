@@ -33,27 +33,35 @@
     });
   });
 
-  UserSchema.method('getAvatar', function() {
-    // undefined avatar unhandled
-    gfs.getStream(this.avatar[0], avatarRoot, function(err, imageStream) {
-      if (err) {
-        throw err;
-      }
-      return imageStream;
-    });
-  });
-
-  UserSchema.method('getAvatarInfo', function() {
-    // undefined avatar unhandled
-    gfs.getInfo(this.avatar[0], avatarRoot, function(err, imageInfo) {
-      if (err) {
-        throw err;
-      }
-      return imageInfo;
-    });
-  });
-
   // static method
+
+  UserSchema.statics.getAvatarById = function(identity) {
+    this.findById(identity, function(err, user) {
+      if (err || !user.avatar[0]) {
+        return null;
+      }
+      gfs.getStream(user.avatar[0], avatarRoot, function(err, imageStream) {
+        if (err) {
+          throw err;
+        }
+        return imageStream;
+      });
+    });
+  });
+
+  UserSchema.statics.getAvatarInfoById = function(identity) {
+    this.findById(identity, function(err, user) {
+      if (err || !user.avatar[0]) {
+        return null;
+      }
+      gfs.getInfo(this.avatar[0], avatarRoot, function(err, imageInfo) {
+        if (err) {
+          throw err;
+        }
+        return imageInfo;
+      });
+    });
+  });
 
   UserSchema.statics.getByUsername = function(identity, callback) {
     var condition = { username: identity };

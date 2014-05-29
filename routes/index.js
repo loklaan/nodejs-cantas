@@ -486,6 +486,43 @@
       res.render('application', {title: 'Cantas', settings: getClientSettings()});
     });
 
+    // route to upload avatar to account
+    app.post('/avatar/upload', ensureAuthenticated, function (req, res) {
+      // ensure user with req.user.id is logged in
+      User.findById(req.user.id, function (err, user) {
+        var options = {
+          filename: req._startTime.valueOf() + '-' + req.files.attachment.name,
+          content_type: req.files.attachment.type
+          // metadata from image?
+        };
+        // TODO: use easy image to
+        // * make different sized avatars
+        // * validate size / ratio / filesize
+        // will require modifying setAvatar and User model
+        user.setAvatar(req.files.attachment);
+      });
+    });
+
+    // route handling avatar images
+    app.get('/user/:userId/avatar', function (req, res) {
+      var avatarInfo = User.getAvatarById(req.params.userId);
+      if (!avatarInfo) {
+        res.send('404', 'User does not exist.')
+        return;
+      }
+      res.set('Content-Type', avatarInfo.content_type);
+      // res.location('../' + avatarInfo.filename);
+      // Would be good but need to handle another avatar get with
+      // filename instead of userid
+
+      var avatarStream = User.getAvatarById(req.params.userId);
+      avatarStream.on('end', function() {
+        res.status('200');
+        res.end();
+      });
+      avatarStream.pipe(res);
+    });
+
     // standalone help page
     app.get('/standalonehelp', function (req, res) {
       res.render('standalone-help', {title: 'Cantas'});
