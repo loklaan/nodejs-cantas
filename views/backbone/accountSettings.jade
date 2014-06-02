@@ -3,20 +3,10 @@ script#template-account-settings-view(type="text/template").
     h3= header
   div#settings-container.row-fluid
     div.span6
-      h4 User Details
-      section.details
-        form(role="form")
-          div.form-group
-            label.control-label Username
-              input#userName(type="text", value=username)
-            label.control-label Password
-              input#userPassword(type="password", placeholder="Password")
       h4 User Avatar
       section.avatar
 
 script#template-account-upload-avatar-view(type="text/template").
-  table.fileupload-table.table-striped.attachment-download-table.js-attachment-download-table(role='presentation')
-    tbody
   span.btn.btn-success.fileinput-button
     span Select&nbsp;&nbsp;image...
     input#attachmentUpload(type="file", multiple="", name="attachment")

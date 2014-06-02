@@ -9,7 +9,7 @@
   cantas.views.accountSettingsView = cantas.views.BaseView.extend({
     events: {
     },
-    el: $('#settings-container'),
+
     template: jade.compile($("#template-account-settings-view").text()),
 
     initialize: function () {
@@ -18,15 +18,15 @@
 
     render: function (context) {
       cantas.setTitle(this.options.title);
+
       this.$el.html(this.template({
         header: this.options.title,
         username: cantas.user.username
       }));
 
       var _this = this;
-      // initialise avatar upload(ing) views
       _this.renderUploadAvatar();
-      // reference CardDetailsView
+
       _this.avatarupload = _this.$el.find('#attachmentUpload').fileupload({
         autoUpload: false,
         url: '/avatar/upload',
@@ -37,7 +37,7 @@
           maxFileSize: 'File is too large, the maximum size is 500KB',
           minFileSize: 'File is too small, the minimum size is 1B'
         }
-      }).on('fileupload', function(err, data) {
+      }).on('fileuploadadd', function(err, data) {
         var newUploadingAvatarView = new cantas.views.accountUploadingAvatarView({
           'data': data,
           'parentView': this
