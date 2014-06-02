@@ -1,10 +1,10 @@
 script#template-account-settings-view(type="text/template").
   div.board-ul-title
     h3= header
-  div.settings-container.row-fluid
+  div#settings-container.row-fluid
     div.span6
       h4 User Details
-      section
+      section.details
         form(role="form")
           div.form-group
             label.control-label Username
@@ -12,7 +12,7 @@ script#template-account-settings-view(type="text/template").
             label.control-label Password
               input#userPassword(type="password", placeholder="Password")
       h4 User Avatar
-      section#avatar-container
+      section.avatar
 
 script#template-account-upload-avatar-view(type="text/template").
   table.fileupload-table.table-striped.attachment-download-table.js-attachment-download-table(role='presentation')

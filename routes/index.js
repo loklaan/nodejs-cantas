@@ -507,7 +507,7 @@
     app.get('/user/:userId/avatar', function (req, res) {
       var avatarInfo = User.getAvatarById(req.params.userId);
       if (!avatarInfo) {
-        res.send('404', 'User does not exist.')
+        res.send('404', 'User does not exist.');
         return;
       }
       res.set('Content-Type', avatarInfo.content_type);
