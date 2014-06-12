@@ -11,7 +11,7 @@
 
   UserSchema = new Schema({
     // avatar field contains id for a GridFS file, refer to GridFS helpers
-    avatar: [ ObjectId ],
+    avatar: ObjectId,
     username: { type: String, required: true, lowercase: true, unique: true },
     fullname: { type: String, default: '' },
     password: { type: String, default: '', select: false },
@@ -24,12 +24,18 @@
   // instance methods
 
   UserSchema.method('setAvatar', function(imageStream, options) {
+    var _this = this;
     options.root = avatarRoot;
     gfs.putStream(imageStream, options, function(err, info) {
       if (err) {
         throw err;
       }
-      this.avatar[0] = info._id;
+
+      _this.update({ avatar : info._id }, function(err, affected, raw) {
+        if (err) {
+          throw err;
+        }
+      });
     });
   });
 
@@ -41,30 +47,36 @@
 
   // static method
 
-  UserSchema.statics.getAvatarById = function(identity) {
+  UserSchema.statics.getAvatarById = function(identity, callback) {
     this.findById(identity, function(err, user) {
-      if (err || !user.avatar[0]) {
-        return null;
+      if (err) {
+        callback(err, null);
       }
-      gfs.getStream(user.avatar[0], avatarRoot, function(err, imageStream) {
+      if (!user.avatar) {
+        callback(new Error('User has no avatar.'), null);
+      }
+      gfs.getStream(user.avatar, avatarRoot, function(err, imageStream) {
         if (err) {
           throw err;
         }
-        return imageStream;
+        callback(null, imageStream);
       });
     });
   };
 
-  UserSchema.statics.getAvatarInfoById = function(identity) {
+  UserSchema.statics.getAvatarInfoById = function(identity, callback) {
     this.findById(identity, function(err, user) {
-      if (err || !user.avatar[0]) {
-        return null;
+      if (err) {
+        callback(err, null);
       }
-      gfs.getInfo(this.avatar[0], avatarRoot, function(err, imageInfo) {
+      if (!user.avatar) {
+        callback(new Error('User has no avatar.'), null);
+      }
+      gfs.getInfo(user.avatar, avatarRoot, function(err, imageInfo) {
         if (err) {
           throw err;
         }
-        return imageInfo;
+        callback(null, imageInfo);
       });
     });
   };

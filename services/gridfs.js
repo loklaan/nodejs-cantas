@@ -23,16 +23,14 @@
    *   First paramter is the new mongoose connection.
    */
   function openDb(callback) {
-    var opts = {
-      db: settings.mongodb.name,
-      user: settings.mongodb.user,
-      pass: settings.mongodb.pass
-    };
-
     var newConn = mongoose.createConnection(
       settings.mongodb.host,
+      settings.mongodb.name,
       settings.mongodb.port,
-      opts
+      {
+        user: settings.mongodb.user,
+        pass: settings.mongodb.pass
+      }
     );
 
     newConn.on('open', function() {

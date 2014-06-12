@@ -495,32 +495,32 @@
           content_type: req.files.attachment.type
           // metadata from image?
         };
-        // TODO: use easy image to
-        // * make different sized avatars
-        // * validate size / ratio / filesize
-        // will require modifying setAvatar and User model
-        user.setAvatar(req.files.attachment);
+        // TODO: accept different sizes, use jquery fileupload plugin for resizing client side
+        // TODO: get read stream from req instead of posted file path
+        user.setAvatar(fs.createReadStream(req.files.attachment.path), options);
       });
     });
 
     // route handling avatar images
     app.get('/user/:userId/avatar', function (req, res) {
-      var avatarInfo = User.getAvatarById(req.params.userId);
-      if (!avatarInfo) {
-        res.send('404', 'User does not exist.');
-        return;
-      }
-      res.set('Content-Type', avatarInfo.content_type);
-      // res.location('../' + avatarInfo.filename);
-      // Would be good but need to handle another avatar get with
-      // filename instead of userid
+      User.getAvatarInfoById(req.params.userId, function(err, avatarInfo) {
+        if (err || !avatarInfo) {
+          res.send('404');
+          return;
+        }
+        res.setHeader("Content-Type", avatarInfo.contentType);
+        // res.location('../' + avatarInfo.filename);
+        // Would be good but need to handle another avatar get with
+        // filename instead of userid
 
-      var avatarStream = User.getAvatarById(req.params.userId);
-      avatarStream.on('end', function() {
-        res.status('200');
-        res.end();
+        User.getAvatarById(req.params.userId, function(err, avatarStream) {
+          avatarStream.on('end', function() {
+            res.status('200');
+            res.end();
+          });
+          avatarStream.pipe(res);
+        });
       });
-      avatarStream.pipe(res);
     });
 
     // standalone help page
